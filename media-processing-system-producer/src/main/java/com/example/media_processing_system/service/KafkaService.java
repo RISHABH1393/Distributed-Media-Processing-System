@@ -9,14 +9,14 @@ public class KafkaService {
 
     private static final String TOPIC = "media-processing";
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, byte[]> kafkaTemplate;
 
     @Autowired
-    public KafkaService(KafkaTemplate<String, String> kafkaTemplate) {
+    public KafkaService(KafkaTemplate<String, byte[]> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendToKafka(String fileName) {
-        kafkaTemplate.send(TOPIC, fileName);
+    public void sendToKafka(byte[] file) {
+        kafkaTemplate.send(TOPIC, file);
     }
 }

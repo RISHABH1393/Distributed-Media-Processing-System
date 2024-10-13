@@ -1,6 +1,9 @@
 package com.example.media_processing_system.controller;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import com.example.media_processing_system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +28,12 @@ public class FileUploadController {
         try {
             // Store the file locally
             String fileName = fileStorageService.storeFile(file);
-
-            // Send file name to Kafka
-            kafkaService.sendToKafka(fileName);
+            
+            // Read the stored file as bytes
+            Path path = Path.of(fileName); 
+            // Send file  to Kafka
+             byte[] fileBytes = Files.readAllBytes(path);
+            kafkaService.sendToKafka(fileBytes);
 
             return ResponseEntity.ok("File uploaded and message sent to Kafka successfully. File name: " + fileName);
         } catch (IOException e) {
